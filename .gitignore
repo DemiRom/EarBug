@@ -1,0 +1,12 @@
+cmake-*
+*.AppImage
+*.bin
+*.o
+*.so
+*.so.*
+*.qm
+.DirIcon
+AppRun
+EarBug
+deploy/usr/bin/qt.conf
+.idea

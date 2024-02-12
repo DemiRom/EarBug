@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dd::widgets::WidgetAppVolumeControl</class>
+ <widget class="QWidget" name="dd::widgets::WidgetAppVolumeControl">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>590</width>
+    <height>161</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>WidgetAppVolumeControl</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="iconLabel">
+       <property name="text">
+        <string>ICON</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="volumeSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
