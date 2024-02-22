@@ -9,11 +9,9 @@ namespace dd::audio {
         PulseAudioController();
         ~PulseAudioController();
         void changeMasterVolume(float level) const;
-        float getMasterVolume();
+        float getMasterVolume() const;
 
     private:
-        float masterVolume = 0;
-
         pa_mainloop *mainloop;
         pa_mainloop_api *mainloop_api;
         pa_context *context;

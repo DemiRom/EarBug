@@ -9,5 +9,12 @@
     <file alias="window_top_right.png">resources/icons/window_top_right.png</file>
     <file alias="window_bottom_left.png">resources/icons/window_bottom_left.png</file>
     <file alias="window_bottom_right.png">resources/icons/window_bottom_right.png</file>
+    <file alias="window_top_left_disabled.png">resources/icons/window_top_left_disabled.png</file>
+    <file alias="window_top_right_disabled.png">resources/icons/window_top_right_disabled.png</file>
+    <file alias="window_bottom_left_disabled.png">resources/icons/window_bottom_left_disabled.png</file>
+    <file alias="window_bottom_right_disabled.png">resources/icons/window_bottom_right_disabled.png</file>
+    <file alias="window.png">resources/icons/window.png</file>
+    <file alias="keyboard.png">resources/icons/keyboard.png</file>
+    <file alias="about.png">resources/icons/about.png</file>
   </qresource>
 </RCC>

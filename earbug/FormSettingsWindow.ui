@@ -21,7 +21,7 @@
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="tabPosition">
-          <enum>QTabWidget::West</enum>
+          <enum>QTabWidget::North</enum>
          </property>
          <property name="tabShape">
           <enum>QTabWidget::Rounded</enum>
@@ -29,9 +29,19 @@
          <property name="currentIndex">
           <number>0</number>
          </property>
+         <property name="elideMode">
+          <enum>Qt::ElideNone</enum>
+         </property>
          <widget class="QWidget" name="flyoutTab">
+          <attribute name="icon">
+           <iconset resource="EarBug.qrc">
+            <normaloff>:/window.png</normaloff>:/window.png</iconset>
+          </attribute>
           <attribute name="title">
-           <string>Flyout Position</string>
+           <string>Window</string>
+          </attribute>
+          <attribute name="toolTip">
+           <string>Window position settings</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
@@ -40,6 +50,26 @@
               <string>Fly Out</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>Display</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="selectDisplayComboBox"/>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="showOnCurrentDisplayCheckBox">
+                <property name="whatsThis">
+                 <string>Toggle to show EarBug on the display where the mouse is currently, used in multi monitor setups.</string>
+                </property>
+                <property name="text">
+                 <string>Set Show on Active Display</string>
+                </property>
+               </widget>
+              </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_2">
                 <item>
@@ -56,8 +86,10 @@
                      <string/>
                     </property>
                     <property name="icon">
-                     <iconset resource="FormMainWindow.qrc">
-                      <normaloff>:/window_bottom_left.png</normaloff>:/window_bottom_left.png</iconset>
+                     <iconset resource="EarBug.qrc">
+                      <normaloff>:/window_bottom_left.png</normaloff>
+                      <disabledoff>:/window_bottom_left_disabled.png</disabledoff>
+                      <disabledon>:/window_bottom_left_disabled.png</disabledon>:/window_bottom_left.png</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -79,8 +111,10 @@
                      <string/>
                     </property>
                     <property name="icon">
-                     <iconset resource="FormMainWindow.qrc">
-                      <normaloff>:/window_top_left.png</normaloff>:/window_top_left.png</iconset>
+                     <iconset resource="EarBug.qrc">
+                      <normaloff>:/window_top_left.png</normaloff>
+                      <disabledoff>:/window_top_left_disabled.png</disabledoff>
+                      <disabledon>:/window_top_left_disabled.png</disabledon>:/window_top_left.png</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -102,8 +136,10 @@
                      <string/>
                     </property>
                     <property name="icon">
-                     <iconset resource="FormMainWindow.qrc">
-                      <normaloff>:/window_top_right.png</normaloff>:/window_top_right.png</iconset>
+                     <iconset resource="EarBug.qrc">
+                      <normaloff>:/window_top_right.png</normaloff>
+                      <disabledoff>:/window_top_right_disabled.png</disabledoff>
+                      <disabledon>:/window_top_right_disabled.png</disabledon>:/window_top_right.png</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -125,8 +161,10 @@
                      <string/>
                     </property>
                     <property name="icon">
-                     <iconset resource="FormMainWindow.qrc">
-                      <normaloff>:/window_bottom_right.png</normaloff>:/window_bottom_right.png</iconset>
+                     <iconset resource="EarBug.qrc">
+                      <normaloff>:/window_bottom_right.png</normaloff>
+                      <disabledoff>:/window_bottom_right_disabled.png</disabledoff>
+                      <disabledon>:/window_bottom_right_disabled.png</disabledon>:/window_bottom_right.png</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -196,14 +234,17 @@
                </layout>
               </item>
               <item>
-               <widget class="QPushButton" name="randomButton">
+               <widget class="QLabel" name="label_5">
                 <property name="text">
-                 <string>PushButton</string>
+                 <string>Theme</string>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="verticalSpacer_3">
+               <widget class="QComboBox" name="themeComboBox"/>
+              </item>
+              <item>
+               <spacer name="verticalSpacer">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
                 </property>
@@ -220,9 +261,16 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="tab_2">
+         <widget class="QWidget" name="keyboardTab">
+          <attribute name="icon">
+           <iconset resource="EarBug.qrc">
+            <normaloff>:/keyboard.png</normaloff>:/keyboard.png</iconset>
+          </attribute>
           <attribute name="title">
            <string>Keyboard</string>
+          </attribute>
+          <attribute name="toolTip">
+           <string>Keyboard keybinds.</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
@@ -232,19 +280,81 @@
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>
-               <spacer name="verticalSpacer">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+               <widget class="QScrollArea" name="scrollArea_2">
+                <property name="widgetResizable">
+                 <bool>true</bool>
                 </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>467</height>
-                 </size>
-                </property>
-               </spacer>
+                <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>584</width>
+                   <height>431</height>
+                  </rect>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_8">
+                  <item>
+                   <layout class="QVBoxLayout" name="keyBindControlsContainer"/>
+                  </item>
+                  <item>
+                   <spacer name="verticalSpacer_3">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
               </item>
              </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="aboutTab">
+          <attribute name="icon">
+           <iconset resource="EarBug.qrc">
+            <normaloff>:/about.png</normaloff>:/about.png</iconset>
+          </attribute>
+          <attribute name="title">
+           <string>About</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QScrollArea" name="scrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>603</width>
+                <height>840</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <widget class="QLabel" name="label_4">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Created by: Demetry Romanowski&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Free Open Source Software&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;MIT License&lt;/p&gt;&lt;p&gt;Copyright (c) 2012-2024 Demetry Romanowski and others&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Permission is hereby granted, free of charge, to any person obtaining&lt;/p&gt;&lt;p&gt;a copy of this software and associated documentation files (the&lt;/p&gt;&lt;p&gt;&amp;quot;Software&amp;quot;), to deal in the Software without restriction, including&lt;/p&gt;&lt;p&gt;without limitation the rights to use, copy, modify, merge, publish,&lt;/p&gt;&lt;p&gt;distribute, sublicense, and/or sell copies of the Software, and to&lt;/p&gt;&lt;p&gt;permit persons to whom the Software is furnished to do so, subject to&lt;/p&gt;&lt;p&gt;the following conditions:&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;The above copyright notice and this permission notice shall be&lt;/p&gt;&lt;p&gt;included in all copies or substantial portions of the Software.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;THE SOFTWARE IS PROVIDED &amp;quot;AS IS&amp;quot;, WITHOUT WARRANTY OF ANY KIND,&lt;/p&gt;&lt;p&gt;EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF&lt;/p&gt;&lt;p&gt;MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND&lt;/p&gt;&lt;p&gt;NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE&lt;/p&gt;&lt;p&gt;LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION&lt;/p&gt;&lt;p&gt;OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION&lt;/p&gt;&lt;p&gt;WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
            </item>
           </layout>
@@ -255,6 +365,13 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QPushButton" name="resetButton">
+         <property name="text">
+          <string>Reset</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
@@ -289,7 +406,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="FormMainWindow.qrc"/>
+  <include location="EarBug.qrc"/>
  </resources>
  <connections/>
 </ui>
