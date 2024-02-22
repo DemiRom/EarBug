@@ -22,7 +22,6 @@ Support the project on [Ko-Fi](https://ko-fi.com/demilovato)
 * Standalone volume mixer
 * Move apps between playback devices
 * Default playback device management
-* Automatic updates via the Microsoft Store
 * Support for light/dark mode and all accent colors
 * Configurable hotkeys
 * Modern context menus
