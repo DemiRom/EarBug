@@ -53,6 +53,7 @@ jobs:
           git push --tags
 
   build_and_deploy:
+    needs: pushTag
     runs-on: ubuntu-22.04
     if: "${{ github.event.workflow_run.conclusion == 'success' }} && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
     steps:
@@ -121,8 +122,15 @@ jobs:
 #          cd ./build/
 #          QT_QPA_PLATFORM=offscreen ctest -C release -VV
 
+      - name: Get Version Name
+        id: versionTag
+        run: |
+          LAST_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)
+          TAG=$(git describe --tags $LAST_TAGGED_COMMIT)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
       - name: Create release artifact
-        if: "${{ github.event_name != 'pull_request' }}"
+        if: "!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
         uses: softprops/action-gh-release@v1
         with:
           files: ./${{ steps.repoName.outputs.name }}.AppImage
