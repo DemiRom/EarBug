@@ -1,0 +1,171 @@
+name: EarBug
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+env:
+  BUILD_TYPE: Release
+  CMAKE_BUILD_TYPE: Release
+
+jobs:
+  createTag:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
+    outputs:
+      name: ${{ steps.version.outputs.name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get tags
+        if: ${{ !env.ACT }}
+        run: git fetch --tags origin
+
+      - name: Set new tag
+        if: ${{ !env.ACT }}
+        id: version
+        run: |
+          LAST_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)
+          TAG=$(git describe --tags $LAST_TAGGED_COMMIT)
+          TAG=${TAG%.*}.$((${TAG##*.} + 1))
+          if git describe --exact-match HEAD; then
+            echo "name=NO" >> $GITHUB_OUTPUT
+          else
+            echo "name=$TAG" >> $GITHUB_OUTPUT
+          fi
+
+  pushTag:
+    needs: createTag
+    runs-on: ubuntu-latest
+    if: ${{ needs.createTag.outputs.name != 'NO' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Tag current commit
+        if: ${{ !env.ACT }}
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a ${{ needs.createTag.outputs.name }} -m "Auto-tagging the current commit"
+          git push --tags
+
+  build_and_deploy:
+    needs: pushTag
+    runs-on: ubuntu-20.04
+    if: "${{ github.event.workflow_run.conclusion == 'success' }} && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+      - name: Extract repository name
+        id: repoName
+        run: |
+          REPO_NAME=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 2)
+          echo "name=$REPO_NAME" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get tags
+        if: ${{ !env.ACT }}
+        run: git fetch --tags origin
+
+      - name: Get Version Name
+        if: ${{ !env.ACT }}
+        id: versionTag
+        run: |
+          LAST_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)
+          TAG=$(git describe --tags $LAST_TAGGED_COMMIT)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Install Build Tools
+        run: |
+          sudo apt update
+          sudo apt install -y cmake build-essential libssl-dev
+
+      - name: Install Pre-Requisite Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            libxcb-xkb-dev \
+            libpulse-dev \
+            libxcb-cursor-dev \
+            libfuse2 \
+            libxcb-keysyms1-dev \
+            libxkbcommon-x11-0 \
+            libxcb-icccm4 \
+            libxcb-image0 \
+            libxcb-keysyms1 \
+            libxcb-randr0 \
+            libxcb-render-util0 \
+            libxcb-shape0 \
+            libgstreamer-plugins-base1.0-dev \
+            libgstreamer1.0-dev \
+            libglx-dev \
+            libgl1-mesa-dev
+
+      - name: Install Qt6
+        run: |
+          sudo apt update
+          sudo pip install aqtinstall
+          sudo aqt install-qt --outputdir /usr/local/Qt linux desktop 6.2.3 gcc_64 -m qtmultimedia
+          export QTDIR=/usr/local/Qt/6.2.3
+          export PATH=$QTDIR/bin:$PATH
+          export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+          export QMAKE=$QTDIR/bin/qmake
+
+      - name: Configure
+        run: |
+          cmake -B build -DCMAKE_PREFIX_PATH="/usr/local/Qt/6.2.3/gcc_64/lib/cmake"
+
+      - name: Build
+        run: cmake --build build --config Release --target install -j$(nproc)
+
+      - name: Download and run LinuxDeployQt
+        run: |          
+          wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+          chmod +x linuxdeployqt-continuous-x86_64.AppImage
+          
+          mkdir ./AppDir
+          mkdir -p ./AppDir/usr/bin
+          mkdir -p ./AppDir/usr/lib
+          mkdir -p ./AppDir/usr/share/applications
+          mkdir -p ./AppDir/usr/share/hicolor/16x16/apps/
+          mkdir -p ./AppDir/usr/share/hicolor/32x32/apps/
+          mkdir -p ./AppDir/usr/share/hicolor/64x64/apps/
+          mkdir -p ./AppDir/usr/share/hicolor/128x128/apps/
+          mkdir -p ./AppDir/usr/share/hicolor/256x256/apps/
+          
+          cp /usr/local/bin/EarBug ./AppDir/usr/bin/EarBug
+          cp ./deploy/EarBug.desktop ./AppDir/usr/share/applications/EarBug.desktop
+          cp ./earbug/resources/icons/earbug_16x16.png ./AppDir/usr/share/hicolor/16x16/apps/EarBug.png
+          cp ./earbug/resources/icons/earbug_32x32.png ./AppDir/usr/share/hicolor/32x32/apps/EarBug.png
+          cp ./earbug/resources/icons/earbug_64x64.png ./AppDir/usr/share/hicolor/64x64/apps/EarBug.png
+          cp ./earbug/resources/icons/earbug_128x128.png ./AppDir/usr/share/hicolor/128x128/apps/EarBug.png
+          cp ./earbug/resources/icons/earbug_256x256.png ./AppDir/usr/share/hicolor/256x256/apps/EarBug.png
+          cp ./earbug/resources/icons/earbug_256x256.png ./AppDir/.DirIcon
+          
+          export QTDIR=/usr/local/Qt/6.2.3/gcc_64
+          export PATH=$QTDIR/bin:$PATH
+          export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+          export QMAKE=$QTDIR/bin/qmake
+
+          ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run ./AppDir/usr/share/applications/EarBug.desktop -executable=./AppDir/usr/bin/EarBug -bundle-non-qt-libs -appimage -verbose=2
+
+#      - name: Run tests
+#        run: |
+#          cd ./build/
+#          QT_QPA_PLATFORM=offscreen ctest -C release -VV
+
+      - name: Create release artifact
+        if: "!env.ACT && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./${{ steps.repoName.outputs.name }}-*-x86_64.AppImage
+          prerelease: true
+          draft: false
+          tag_name: ${{ steps.versionTag.outputs.tag }}
+          token: ${{ secrets.GITHUB_TOKEN }}

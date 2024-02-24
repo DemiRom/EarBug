@@ -2,6 +2,8 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/DemiRom/EarBug?style=flat-square)](https://github.com/DemiRom/EarBug/issues) [![GitHub forks](https://img.shields.io/github/forks/DemiRom/EarBug?style=flat-square)](https://github.com/DemiRom/EarBug/network) [![GitHub stars](https://img.shields.io/github/stars/DemiRom/EarBug?style=flat-square)](https://github.com/DemiRom/EarBug/stargazers) [![GitHub license](https://img.shields.io/github/license/DemiRom/EarBug?style=flat-square)](https://github.com/DemiRom/EarBug/blob/main/LICENSE) ![Maintenance status](https://img.shields.io/maintenance/yes/2024?style=flat-square)
 
+![Screnshot](EarBugScreenShot.png)
+
 ## Awards
 
 None Yet
@@ -20,7 +22,6 @@ Support the project on [Ko-Fi](https://ko-fi.com/demilovato)
 * Standalone volume mixer
 * Move apps between playback devices
 * Default playback device management
-* Automatic updates via the Microsoft Store
 * Support for light/dark mode and all accent colors
 * Configurable hotkeys
 * Modern context menus
