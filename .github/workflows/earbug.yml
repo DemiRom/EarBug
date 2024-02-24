@@ -66,6 +66,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Get Version Name
+        id: versionTag
+        run: |
+          LAST_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)
+          TAG=$(git describe --tags $LAST_TAGGED_COMMIT)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
       - name: Install Qt6
         run: |
           sudo apt update
@@ -121,13 +128,6 @@ jobs:
 #        run: |
 #          cd ./build/
 #          QT_QPA_PLATFORM=offscreen ctest -C release -VV
-
-      - name: Get Version Name
-        id: versionTag
-        run: |
-          LAST_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)
-          TAG=$(git describe --tags $LAST_TAGGED_COMMIT)
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Create release artifact
         if: "!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
