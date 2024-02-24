@@ -1,0 +1,90 @@
+name: EarBug
+
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  BUILD_TYPE: Release
+  CMAKE_BUILD_TYPE: Release
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-22.04
+    if: "${{ github.event.workflow_run.conclusion == 'success' }} && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+      - name: Extract repository name
+        id: repoName
+        run: |
+          REPO_NAME=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 2)
+          echo "name=$REPO_NAME" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Qt6
+        run: |
+          sudo apt update
+          sudo apt install -y qt6-base-dev
+          sudo apt install -y libglx-dev libgl1-mesa-dev
+          sudo apt install -y qt6-multimedia-dev
+
+      - name: Install Build Tools
+        run: |
+          sudo apt install cmake -y
+          sudo apt install build-essential libssl-dev -y
+
+      - name: Install additional deps
+        run: |
+          sudo apt install -y libxcb-xkb-dev
+          sudo apt install -y libpulse-dev
+          sudo apt install -y libxcb-cursor-dev
+          sudo apt install -y libfuse2
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_PREFIX_PATH="/usr/local/Qt/6.2.3/gcc_64/lib/cmake"
+
+      - name: Build
+        run: cmake --build build --config Release --target install -j4
+
+      - name: Download and run LinuxDeployQt
+        run: |
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy-x86_64.AppImage
+          export OUTPUT=${{ steps.repoName.outputs.name }}.AppImage
+          
+          mkdir ./package
+          mkdir -p ./package/usr/bin
+          mkdir -p ./package/usr/lib
+          mkdir -p ./package/usr/share/applications
+          mkdir -p ./package/usr/share/hicolor/16x16/apps/
+          mkdir -p ./package/usr/share/hicolor/32x32/apps/
+          mkdir -p ./package/usr/share/hicolor/64x64/apps/
+          mkdir -p ./package/usr/share/hicolor/128x128/apps/
+          mkdir -p ./package/usr/share/hicolor/256x256/apps/
+          
+          cp /usr/local/bin/EarBug ./package/usr/bin/EarBug
+          cp ./deploy/EarBug.desktop ./package/usr/share/applications/EarBug.desktop
+          cp ./earbug/resources/icons/earbug_16x16.png ./package/usr/share/hicolor/16x16/apps/EarBug.png
+          cp ./earbug/resources/icons/earbug_32x32.png ./package/usr/share/hicolor/32x32/apps/EarBug.png
+          cp ./earbug/resources/icons/earbug_64x64.png ./package/usr/share/hicolor/64x64/apps/EarBug.png
+          cp ./earbug/resources/icons/earbug_128x128.png ./package/usr/share/hicolor/128x128/apps/EarBug.png
+          cp ./earbug/resources/icons/earbug_256x256.png ./package/usr/share/hicolor/256x256/apps/EarBug.png
+          
+          ./linuxdeploy-x86_64.AppImage --appimage-extract-and-run --appdir AppDir -e ./package/usr/bin/EarBug -d ./package/usr/share/applications/EarBug.desktop -i ./package/usr/share/hicolor/16x16/apps/EarBug.png -i ./package/usr/share/hicolor/32x32/apps/EarBug.png -i ./package/usr/share/hicolor/64x64/apps/EarBug.png -i ./package/usr/share/hicolor/128x128/apps/EarBug.png -i ./package/usr/share/hicolor/256x256/apps/EarBug.png --output appimage
+
+#      - name: Run tests
+#        run: |
+#          cd ./build/
+#          QT_QPA_PLATFORM=offscreen ctest -C release -VV
+
+      - name: Create release artifact
+        if: "${{ github.event_name != 'pull_request' }}"
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./${{ steps.repoName.outputs.name }}.AppImage
+          prerelease: true
+          draft: false
+          tag_name: ${{ steps.versionTag.outputs.tag }}
+          token: ${{ secrets.GITHUB_TOKEN }}
