@@ -66,6 +66,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Get tags
+        run: git fetch --tags origin
+
       - name: Get Version Name
         id: versionTag
         run: |
