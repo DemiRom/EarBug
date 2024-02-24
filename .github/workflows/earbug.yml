@@ -110,7 +110,7 @@ jobs:
       - name: Install Qt6
         run: |
           sudo apt update
-          pip install aqtinstall
+          sudo pip install aqtinstall
           sudo aqt install-qt --outputdir /usr/local/Qt linux desktop 6.2.3 gcc_64 -m qtmultimedia
           export QTDIR=/usr/local/Qt/6.2.3
           export PATH=$QTDIR/bin:$PATH
