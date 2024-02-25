@@ -3,21 +3,42 @@
 
 #include <QWidget>
 
+#include "PulseAudioController.h"
+
 namespace dd::widgets {
-QT_BEGIN_NAMESPACE
-namespace Ui { class WidgetAppVolumeControl; }
-QT_END_NAMESPACE
+    QT_BEGIN_NAMESPACE
 
-class WidgetAppVolumeControl : public QWidget {
-Q_OBJECT
+    namespace Ui {
+        class WidgetAppVolumeControl;
+    }
 
-public:
-    explicit WidgetAppVolumeControl(QWidget *parent = nullptr);
-    ~WidgetAppVolumeControl() override;
+    QT_END_NAMESPACE
 
-private:
-    Ui::WidgetAppVolumeControl *ui;
-};
+    class WidgetAppVolumeControl final : public QWidget {
+        Q_OBJECT
+
+    public:
+        explicit WidgetAppVolumeControl(audio::PulseAudioController* audioContoller, audio::Sink* sinkItem, QWidget *parent = nullptr);
+
+        ~WidgetAppVolumeControl() override;
+
+    private:
+        Ui::WidgetAppVolumeControl *ui;
+        audio::Sink* sinkItem;
+        audio::PulseAudioController* audioController;
+
+        QString clientName;
+
+        [[nodiscard]] QIcon getSpeakerIconBasedOnVolume() const;
+
+        bool muted;
+
+    private slots:
+        void volumeChanged(int value) const;
+
+        void muteButtonPressed();
+
+    };
 } // dd::widgets
 
 #endif //WIDGETAPPVOLUMECONTROL_H

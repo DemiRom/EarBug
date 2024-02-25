@@ -17,7 +17,7 @@ namespace dd::forms {
 
     QT_END_NAMESPACE
 
-    class FormMainWindow : public QWidget {
+    class FormMainWindow final : public QWidget {
         Q_OBJECT
 
     public:
@@ -27,32 +27,27 @@ namespace dd::forms {
 
     private:
         Ui::FormMainWindow *ui;
-        float masterVolumeLevel = 0;
         audio::PulseAudioController *pulseAudioController;
         FormSettingsWindow *settingsWindow = nullptr;
 
         void populateOutputDevices() const;
 
-
-        bool masterVolumeMuted = false;
-
         [[nodiscard]] QIcon getSpeakerIconBasedOnVolume() const;
 
-        void updateComputerMasterVolume();
+        bool masterVolumeMuted = false;
 
     private slots:
         void showFromHotkey();
 
         void outputDeviceChanged(int index) const;
 
-        void masterVolumeSliderChanged(float value);
+        void masterVolumeSliderChanged(float value) const;
 
         void masterVolumeMuteButtonPressed();
 
         void settingsButtonPressed() const;
 
         void applicationStateChanged(Qt::ApplicationState state);
-
     };
 } // dd::forms
 

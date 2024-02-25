@@ -36,7 +36,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="FormMainWindow.qrc">
+          <iconset resource="EarBug.qrc">
            <normaloff>:/settings.png</normaloff>:/settings.png</iconset>
          </property>
         </widget>
@@ -57,7 +57,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="FormMainWindow.qrc">
+          <iconset resource="EarBug.qrc">
            <normaloff>:/sound.png</normaloff>:/sound.png</iconset>
          </property>
         </widget>
@@ -72,27 +72,46 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="applicationVolumeControlVBoxLayout"/>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="widgetResizable">
+        <bool>true</bool>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>382</width>
+          <height>198</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <layout class="QVBoxLayout" name="applicationVolumeControlVBoxLayout"/>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </widget>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
  <resources>
-  <include location="FormMainWindow.qrc"/>
+  <include location="EarBug.qrc"/>
  </resources>
  <connections/>
 </ui>

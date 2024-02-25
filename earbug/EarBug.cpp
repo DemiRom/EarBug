@@ -61,17 +61,17 @@ namespace dd::earbug {
 
         switch (getSettingsManager()->getEarbugWindowPosition()) {
             case settings::EarBugWindowPosition::TOP_RIGHT:
-                mainWindow->move(screenResolution.width() - mainWindow->geometry().width() + offsetX, offsetY);
+                mainWindow->move(screenResolution.width() - mainWindow->geometry().width() + (-offsetX), offsetY);
                 break;
             case settings::EarBugWindowPosition::TOP_LEFT:
                 mainWindow->move(offsetX, offsetY);
                 break;
             case settings::EarBugWindowPosition::BOTTOM_LEFT:
-                mainWindow->move(offsetX, screenResolution.height() - mainWindow->geometry().height() + offsetY);
+                mainWindow->move(offsetX, screenResolution.height() - mainWindow->geometry().height() + (-offsetY));
                 break;
             case settings::EarBugWindowPosition::BOTTOM_RIGHT:
-                mainWindow->move(screenResolution.width() - mainWindow->geometry().width() + offsetX,
-                                 screenResolution.height() - mainWindow->geometry().height() + offsetY);
+                mainWindow->move(screenResolution.width() - mainWindow->geometry().width() + (-offsetX),
+                                 screenResolution.height() - mainWindow->geometry().height() + (-offsetY));
                 break;
             default: ;
         }

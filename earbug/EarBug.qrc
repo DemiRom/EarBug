@@ -24,4 +24,7 @@
     <file alias="keyboard.png">resources/icons/keyboard.png</file>
     <file alias="about.png">resources/icons/about.png</file>
   </qresource>
+  <qresource prefix="/themes">
+    <file alias="default.theme">resources/themes/default.theme</file>
+  </qresource>
 </RCC>

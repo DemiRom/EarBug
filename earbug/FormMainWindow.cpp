@@ -7,6 +7,7 @@
 #include "EarBug.h"
 #include "PulseAudioController.h"
 #include "FormSettingsWindow.h"
+#include "WidgetAppVolumeControl.h"
 #include "uglobalhotkeys.h"
 
 namespace dd::forms {
@@ -15,15 +16,30 @@ namespace dd::forms {
 
         //Create objects
         this->settingsWindow = new FormSettingsWindow();
-        this->pulseAudioController = new audio::PulseAudioController();
+        this->pulseAudioController = new audio::PulseAudioController("EarBug");
+        this->pulseAudioController->collectSinks();
+
+        for (const auto sinks = this->pulseAudioController->listSinks(); auto &sink: *sinks) {
+            if (sink == nullptr) {
+                qWarning() << "Sink is null!";
+                continue;
+            }
+
+            this->ui->applicationVolumeControlVBoxLayout->addWidget(
+                new widgets::WidgetAppVolumeControl(this->pulseAudioController, sink.get()));
+        }
 
         //Set the main window flags.
         this->setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
         this->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 
         //Update the master volume slider
-        this->masterVolumeLevel = this->pulseAudioController->getMasterVolume();
-        this->ui->masterVolumeSlider->setValue(this->masterVolumeLevel); //TODO
+        // this->masterVolumeLevel = this->pulseAudioController->getMasterVolume();
+
+        this->ui->masterVolumeSlider->setMaximum(PA_VOLUME_UI_MAX);
+        this->ui->masterVolumeSlider->setMinimum(0);
+
+        this->ui->masterVolumeSlider->setValue(PA_VOLUME_NORM); //TODO
         this->ui->applicationIconButton->setIcon(getSpeakerIconBasedOnVolume());
 
         //Populate output devices
@@ -62,21 +78,16 @@ namespace dd::forms {
     }
 
     QIcon FormMainWindow::getSpeakerIconBasedOnVolume() const {
-        if (this->masterVolumeLevel <= 33) {
+        if (this->ui->masterVolumeSlider->value() <= (PA_VOLUME_UI_MAX / 3)) {
             return QIcon(":/sound_lowest.png");
         }
 
-        if (this->masterVolumeLevel > 33 && this->masterVolumeLevel <= 66) {
+        if (this->ui->masterVolumeSlider->value() > (PA_VOLUME_UI_MAX / 3) && this->ui->masterVolumeSlider->value() <= (
+                (PA_VOLUME_UI_MAX / 3) * 2)) {
             return QIcon(":/sound_lower.png");
         }
 
         return QIcon(":/sound.png");
-    }
-
-    void FormMainWindow::updateComputerMasterVolume() {
-        //TODO
-        // audio::PulseAudioController::ChangeMasterVolume(this->masterVolumeMuted ? 0 : this->masterVolumeLevel);
-        pulseAudioController->changeMasterVolume(this->masterVolumeMuted ? 0 : this->masterVolumeLevel);
     }
 
     void FormMainWindow::showFromHotkey() {
@@ -97,31 +108,35 @@ namespace dd::forms {
         this->activateWindow();
     }
 
-    void FormMainWindow::outputDeviceChanged(int index) const {
+    // ReSharper disable once CppMemberFunctionMayBeStatic
+    void FormMainWindow::outputDeviceChanged(const int index) const {
+        // NOLINT(*-convert-member-functions-to-static)
         qDebug("INDEX %i", index);
     }
 
-    void FormMainWindow::masterVolumeSliderChanged(float value) {
-        qDebug("Master Volue: %f", value);
-        this->masterVolumeLevel = value;
-
+    void FormMainWindow::masterVolumeSliderChanged(const float value) const {
+        qDebug("Master Volume: %f", value);
+        pulseAudioController->setMasterVolume(this->ui->masterVolumeSlider->value());
         this->ui->applicationIconButton->setIcon(getSpeakerIconBasedOnVolume());
-
-        updateComputerMasterVolume();
+        //TODO Save the master volume in the settings to re load last saved state
     }
 
     void FormMainWindow::masterVolumeMuteButtonPressed() {
-        masterVolumeMuted = !masterVolumeMuted;
+        this->masterVolumeMuted = !this->masterVolumeMuted;
 
         // ReShaper bug - thinks this code is unreachable for some reason.
         // ReSharper disable once CppDFAUnreachableCode
         this->ui->applicationIconButton->setIcon(
             masterVolumeMuted ? QIcon(":/mute.png") : getSpeakerIconBasedOnVolume());
 
-        updateComputerMasterVolume();
+        this->pulseAudioController->setMuteMasterVolume(this->masterVolumeMuted);
     }
 
     void FormMainWindow::settingsButtonPressed() const {
+        if (!settingsWindow->isHidden()) {
+            settingsWindow->activateWindow();
+            settingsWindow->setFocus();
+        }
         settingsWindow->show();
     }
 

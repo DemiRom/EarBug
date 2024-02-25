@@ -122,7 +122,9 @@ namespace dd::earbug::settings {
         auto ret = QList<dd::settings::Theme>();
         for (const auto& name : themes) {
             auto file = QFile("./themes/" + name);
-            file.open(QFile::ReadOnly);
+            if(!file.open(QFile::ReadOnly)) {
+                continue;
+            }
             const auto value = QString::fromStdString(file.readAll().toStdString());
             ret.append({name, value});
             file.close();
@@ -132,7 +134,10 @@ namespace dd::earbug::settings {
 
     QString GlobalSettingsManager::getThemeDataByName(const QString &name) {
         auto file = QFile("./themes/" + name);
-        file.open(QFile::ReadOnly);
+        if(!file.open(QFile::ReadOnly)) {
+            qWarning() << "Theme file not found";
+            return "";
+        }
         const auto value = QString::fromStdString(file.readAll().toStdString());
         file.close();
         return value;
