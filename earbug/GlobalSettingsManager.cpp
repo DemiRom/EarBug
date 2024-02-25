@@ -1,6 +1,13 @@
 #include "GlobalSettingsManager.h"
 
+#include <qdir.h>
+
 #include "Hotkey.h"
+#include "Theme.h"
+
+namespace dd::forms::theme {
+    struct Theme;
+}
 
 namespace dd::earbug::settings {
     GlobalSettingsManager::GlobalSettingsManager(QWidget *parent) {
@@ -81,7 +88,7 @@ namespace dd::earbug::settings {
         this->hotkeyManager->registerHotkey(hotkey.keys.toString(), hotkey.id);
     }
 
-    void GlobalSettingsManager::setTheme(const QString &theme) const {
+    void GlobalSettingsManager::saveTheme(const QString &theme) const {
         this->settings->setValue("theme", theme);
     }
 
@@ -91,6 +98,48 @@ namespace dd::earbug::settings {
 
     void GlobalSettingsManager::saveShowOnCurrentDisplay(const bool showOnCurrentDisplay) const {
         this->settings->setValue("showOnCurrentDisplay", showOnCurrentDisplay);
+    }
+
+    void GlobalSettingsManager::saveWidth(const int width) const {
+        this->settings->setValue("width", width);
+    }
+
+    void GlobalSettingsManager::saveHeight(const int height) const {
+        this->settings->setValue("height", height);
+    }
+
+    int GlobalSettingsManager::getWidth() const {
+        return this->settings->value("width").toInt();
+    }
+
+    int GlobalSettingsManager::getHeight() const {
+        return this->settings->value("height").toInt();
+    }
+
+    QList<dd::settings::Theme> GlobalSettingsManager::loadThemes() {
+        const auto themeDir = QDir("./themes");
+        auto themes = themeDir.entryList(QStringList() << "*.theme", QDir::Files);
+        auto ret = QList<dd::settings::Theme>();
+        for (const auto& name : themes) {
+            auto file = QFile("./themes/" + name);
+            file.open(QFile::ReadOnly);
+            const auto value = QString::fromStdString(file.readAll().toStdString());
+            ret.append({name, value});
+            file.close();
+        }
+        return ret;
+    }
+
+    QString GlobalSettingsManager::getThemeDataByName(const QString &name) {
+        auto file = QFile("./themes/" + name);
+        file.open(QFile::ReadOnly);
+        const auto value = QString::fromStdString(file.readAll().toStdString());
+        file.close();
+        return value;
+    }
+
+    QString GlobalSettingsManager::getThemeData() const {
+        return getThemeDataByName(this->getTheme());
     }
 
     bool GlobalSettingsManager::getShowOnCurrentDisplay() const {

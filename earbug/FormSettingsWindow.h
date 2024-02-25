@@ -27,11 +27,14 @@ namespace dd::forms {
         Ui::FormSettingsWindow *ui;
         earbug::settings::EarBugWindowPosition position{};
 
+
         void loadAllSettings();
 
         void setPositionalButtonState() const;
 
         static void updateWindowPosition();
+
+        void updateWindowPositionOnPositionChanged() const;
 
     private slots:
         void showOnCurrentDisplayCheckBoxChanged(int state) const;
@@ -49,6 +52,20 @@ namespace dd::forms {
         void setEarButTopRight();
 
         static void resetButtonPressed();
+
+        void xOffsetChanged(const QString &newText) const;
+
+        void yOffsetChanged(const QString &newText) const;
+
+        void widthChanged(const QString &newText) const;
+
+        void themeChanged(int idx) const;
+
+    protected:
+        void showEvent(QShowEvent *event) override;
+
+    private:
+        void heightChanged(const QString &newText) const;
     };
 } // dd::forms
 

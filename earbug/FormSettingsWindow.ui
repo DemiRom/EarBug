@@ -6,12 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>652</width>
-    <height>589</height>
+    <width>656</width>
+    <height>675</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>EarBug Settings</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="EarBug.qrc">
+    <normaloff>:/earbug_128x128.png</normaloff>:/earbug_128x128.png</iconset>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -47,7 +51,7 @@
            <item>
             <widget class="QGroupBox" name="flyoutGroupBox">
              <property name="title">
-              <string>Fly Out</string>
+              <string>Fly Out Window Settings</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_2">
               <item>
@@ -177,59 +181,92 @@
                  </layout>
                 </item>
                 <item>
-                 <widget class="QGroupBox" name="groupBox_3">
-                  <property name="title">
-                   <string>Offset</string>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_3">
-                   <item>
-                    <widget class="QLabel" name="label">
-                     <property name="text">
-                      <string>X Offset</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLineEdit" name="xOffsetInput"/>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_2">
-                     <property name="text">
-                      <string>Y Offset</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLineEdit" name="yOffsetInput"/>
-                   </item>
-                   <item>
-                    <spacer name="verticalSpacer_2">
-                     <property name="orientation">
-                      <enum>Qt::Vertical</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>20</width>
-                       <height>40</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
+                 <layout class="QVBoxLayout" name="offsetAndSizeGroupLayout">
+                  <item>
+                   <widget class="QGroupBox" name="groupBox_3">
+                    <property name="title">
+                     <string>Window Offset</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_3">
+                     <item>
+                      <widget class="QLabel" name="label">
+                       <property name="text">
+                        <string>X Offset</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="xOffsetInput"/>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_2">
+                       <property name="text">
+                        <string>Y Offset</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="yOffsetInput"/>
+                     </item>
+                     <item>
+                      <spacer name="verticalSpacer_2">
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>20</width>
+                         <height>40</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QGroupBox" name="groupBox_2">
+                    <property name="title">
+                     <string>Window Size</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_9">
+                     <item>
+                      <widget class="QLabel" name="widthHeight">
+                       <property name="text">
+                        <string>Width</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="widthLineEdit"/>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="heightLabel">
+                       <property name="text">
+                        <string>Height</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="heightLineEdit"/>
+                     </item>
+                     <item>
+                      <spacer name="verticalSpacer_4">
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>20</width>
+                         <height>40</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                </layout>
               </item>
@@ -276,7 +313,7 @@
            <item>
             <widget class="QGroupBox" name="groupBox">
              <property name="title">
-              <string>Keyboard</string>
+              <string>Keyboard Settings</string>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>
@@ -289,8 +326,8 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>584</width>
-                   <height>431</height>
+                   <width>588</width>
+                   <height>517</height>
                   </rect>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -339,10 +376,23 @@
                 <x>0</x>
                 <y>0</y>
                 <width>603</width>
-                <height>840</height>
+                <height>974</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <widget class="QLabel" name="iconLabel">
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="pixmap">
+                  <pixmap resource="EarBug.qrc">:/earbug_128x128.png</pixmap>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
                <item>
                 <widget class="QLabel" name="label_4">
                  <property name="text">

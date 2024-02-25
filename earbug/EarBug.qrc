@@ -1,5 +1,12 @@
 <RCC>
   <qresource prefix="/">
+    <file alias="earbug_16x16.png">resources/icons/earbug_16x16.png</file>
+    <file alias="earbug_32x32.png">resources/icons/earbug_32x32.png</file>
+    <file alias="earbug_64x64.png">resources/icons/earbug_64x64.png</file>
+    <file alias="earbug_128x128.png">resources/icons/earbug_128x128.png</file>
+    <file alias="earbug_256x256.png">resources/icons/earbug_256x256.png</file>
+    <file alias="earbug_512x512.png">resources/icons/earbug_512x512.png</file>
+    <file alias="earbug_1024x1024.png">resources/icons/earbug_1024x1024.png</file>
     <file alias="sound.png">resources/icons/sound.png</file>
     <file alias="sound_lower.png">resources/icons/sound_lower.png</file>
     <file alias="sound_lowest.png">resources/icons/sound_lowest.png</file>

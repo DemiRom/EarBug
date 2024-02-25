@@ -44,6 +44,7 @@ set(SRCS
         EarBug.cpp
         EarBug.h
         DebugLogger.h
+        Theme.h
 )
 
 # Add exe here

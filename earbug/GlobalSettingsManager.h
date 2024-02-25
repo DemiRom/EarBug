@@ -5,6 +5,7 @@
 
 #include "EarBugWindowPosition.h"
 #include "Hotkey.h"
+#include "Theme.h"
 #include "uglobalhotkeys.h"
 
 
@@ -25,11 +26,15 @@ namespace dd::earbug::settings {
 
         void saveHotkey(const Hotkey &hotkey) const;
 
-        void setTheme(const QString &theme) const;
+        void saveTheme(const QString &theme) const;
 
         void saveDisplay(const QString &display) const;
 
         void saveShowOnCurrentDisplay(bool showOnCurrentDisplay) const;
+
+        void saveWidth(int width) const;
+
+        void saveHeight(int height) const;
 
         void resetSettings() const;
 
@@ -47,7 +52,17 @@ namespace dd::earbug::settings {
 
         [[nodiscard]] QString getDisplay() const;
 
-        [[nodisacrd]] bool getShowOnCurrentDisplay() const;
+        [[nodiscard]] bool getShowOnCurrentDisplay() const;
+
+        [[nodiscard]] int getWidth() const;
+
+        [[nodiscard]] int getHeight() const;
+
+        [[nodiscard]] static QList<dd::settings::Theme> loadThemes();
+
+        [[nodiscard]] static QString getThemeDataByName(const QString& name);
+
+        [[nodiscard]] QString getThemeData() const;
 
     signals:
         void showEarBugHotkeyPressed();

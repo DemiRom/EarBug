@@ -20,7 +20,9 @@ namespace dd::earbug {
 
         int start(int argc, char **argv);
         void setWindowPosition() const;
+        void setWindowSize() const;
         void setDisplay(const QString& displayName);
+        void setTheme(const QString &theme) const;
 
         [[nodiscard]] settings::GlobalSettingsManager* getSettingsManager() const;
 
