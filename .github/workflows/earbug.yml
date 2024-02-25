@@ -111,15 +111,21 @@ jobs:
         run: |
           sudo apt update
           sudo pip install aqtinstall
-          sudo aqt install-qt --outputdir /usr/local/Qt linux desktop 6.2.3 gcc_64 -m qtmultimedia
-          export QTDIR=/usr/local/Qt/6.2.3
+          sudo aqt install-qt --outputdir /usr/local/Qt linux desktop 6.4.2 gcc_64 -m qtmultimedia
+          export QTDIR=/usr/local/Qt/6.4.2/gcc_64
           export PATH=$QTDIR/bin:$PATH
           export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
           export QMAKE=$QTDIR/bin/qmake
 
+          echo "DEBUG DEBUG DEBUG"
+          ls $QTDIR/include/QtGui/6.4.2/QtGui/qpa
+          mkdir -p /usr/include/qt6/
+          cp -r $QTDIR/include/* /usr/include/qt6/
+          echo "EDEBUG"
+
       - name: Configure
         run: |
-          cmake -B build -DCMAKE_PREFIX_PATH="/usr/local/Qt/6.2.3/gcc_64/lib/cmake"
+          cmake -B build -DCMAKE_PREFIX_PATH="/usr/local/Qt/6.4.2/gcc_64/lib/cmake"
 
       - name: Build
         run: cmake --build build --config Release --target install -j$(nproc)
@@ -148,7 +154,7 @@ jobs:
           cp ./earbug/resources/icons/earbug_256x256.png ./AppDir/usr/share/hicolor/256x256/apps/EarBug.png
           cp ./earbug/resources/icons/earbug_256x256.png ./AppDir/.DirIcon
           
-          export QTDIR=/usr/local/Qt/6.2.3/gcc_64
+          export QTDIR=/usr/local/Qt/6.4.2/gcc_64
           export PATH=$QTDIR/bin:$PATH
           export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
           export QMAKE=$QTDIR/bin/qmake

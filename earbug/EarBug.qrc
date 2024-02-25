@@ -1,0 +1,27 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="earbug_16x16.png">resources/icons/earbug_16x16.png</file>
+    <file alias="earbug_32x32.png">resources/icons/earbug_32x32.png</file>
+    <file alias="earbug_64x64.png">resources/icons/earbug_64x64.png</file>
+    <file alias="earbug_128x128.png">resources/icons/earbug_128x128.png</file>
+    <file alias="earbug_256x256.png">resources/icons/earbug_256x256.png</file>
+    <file alias="earbug_512x512.png">resources/icons/earbug_512x512.png</file>
+    <file alias="earbug_1024x1024.png">resources/icons/earbug_1024x1024.png</file>
+    <file alias="sound.png">resources/icons/sound.png</file>
+    <file alias="sound_lower.png">resources/icons/sound_lower.png</file>
+    <file alias="sound_lowest.png">resources/icons/sound_lowest.png</file>
+    <file alias="settings.png">resources/icons/setting.png</file>
+    <file alias="mute.png">resources/icons/mute.png</file>
+    <file alias="window_top_left.png">resources/icons/window_top_left.png</file>
+    <file alias="window_top_right.png">resources/icons/window_top_right.png</file>
+    <file alias="window_bottom_left.png">resources/icons/window_bottom_left.png</file>
+    <file alias="window_bottom_right.png">resources/icons/window_bottom_right.png</file>
+    <file alias="window_top_left_disabled.png">resources/icons/window_top_left_disabled.png</file>
+    <file alias="window_top_right_disabled.png">resources/icons/window_top_right_disabled.png</file>
+    <file alias="window_bottom_left_disabled.png">resources/icons/window_bottom_left_disabled.png</file>
+    <file alias="window_bottom_right_disabled.png">resources/icons/window_bottom_right_disabled.png</file>
+    <file alias="window.png">resources/icons/window.png</file>
+    <file alias="keyboard.png">resources/icons/keyboard.png</file>
+    <file alias="about.png">resources/icons/about.png</file>
+  </qresource>
+</RCC>

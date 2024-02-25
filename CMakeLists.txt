@@ -17,3 +17,4 @@ endif()
 include_directories(include)
 
 add_subdirectory(earbug)
+add_subdirectory(uglobalhotkey)

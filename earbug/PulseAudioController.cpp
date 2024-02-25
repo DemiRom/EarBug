@@ -1,8 +1,13 @@
 #include "PulseAudioController.h"
 
 #include <qlogging.h>
+#include <xcb/xproto.h>
+
+#include <QDebug>
 
 namespace dd::audio {
+    float masterVolume = 0;
+
     PulseAudioController::PulseAudioController() {
         mainloop = pa_mainloop_new();
         mainloop_api = pa_mainloop_get_api(mainloop);
@@ -15,8 +20,7 @@ namespace dd::audio {
             pa_mainloop_iterate(mainloop, 1, NULL);
         }
 
-        pa_operation *o = pa_context_get_sink_info_by_name(context, "@DEFAULT_SINK@",
-                                                           PulseAudioController::sink_info_callback, NULL);
+        pa_operation *o = pa_context_get_sink_info_by_name(context, "@DEFAULT_SINK@", sink_info_callback, NULL);
 
         while (pa_operation_get_state(o) == PA_OPERATION_RUNNING) {
             pa_mainloop_iterate(mainloop, 1, NULL);
@@ -34,8 +38,8 @@ namespace dd::audio {
         pa_mainloop_free(mainloop);
     }
 
-    float PulseAudioController::getMasterVolume() {
-        return this->masterVolume; //TODO
+    float PulseAudioController::getMasterVolume() const {
+        return (masterVolume / PA_VOLUME_NORM) * 100;
     }
 
     void PulseAudioController::context_state_callback(pa_context *c, void *userdata) {
@@ -60,12 +64,16 @@ namespace dd::audio {
         // Print the volume of the default sink
         // printf("Master Volume: %s\n", pa_volume_snprint(info->volume.values, info->volume.channels));
         qDebug("Master Volume is: %i", info->volume.values[0]);
+        masterVolume = info->volume.values[0];
+
         qDebug("Application Name: %s\n", info->proplist ? pa_proplist_gets(info->proplist, "application.name") : "Unknown");
         // qDebug("Process ID: %u\n", info->proplist ? strtoul(pa_proplist_gets(info->proplist, "application.process.id"), NULL,  10) :  0);
     }
 
     void PulseAudioController::changeMasterVolume(const float level) const {
         const int volumeLevel = static_cast<int>(level * (PA_VOLUME_NORM / 100.0f));
+
+        qDebug() << "Set Volume: " << volumeLevel;
 
         pa_operation *o;
         pa_cvolume volume;
