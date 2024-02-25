@@ -3,10 +3,10 @@ name: EarBug
 on:
   pull_request:
     branches:
-      - main
+      - develop
   push:
     branches:
-      - main
+      - develop
 
 env:
   BUILD_TYPE: Release
@@ -129,7 +129,7 @@ jobs:
         run: cmake --build build --config Release --target install -j$(nproc)
 
       - name: Download and run LinuxDeployQt
-        run: |          
+        run: |
           wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
           chmod +x linuxdeployqt-continuous-x86_64.AppImage
           
@@ -159,17 +159,17 @@ jobs:
 
           ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run ./AppDir/usr/share/applications/EarBug.desktop -executable=./AppDir/usr/bin/EarBug -bundle-non-qt-libs -appimage -verbose=2
 
-#      - name: Run tests
-#        run: |
-#          cd ./build/
-#          QT_QPA_PLATFORM=offscreen ctest -C release -VV
+      #      - name: Run tests
+      #        run: |
+      #          cd ./build/
+      #          QT_QPA_PLATFORM=offscreen ctest -C release -VV
 
       - name: Create release artifact
         if: "!env.ACT && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
         uses: softprops/action-gh-release@v1
         with:
           files: ./${{ steps.repoName.outputs.name }}-*-x86_64.AppImage
-          prerelease: false
+          prerelease: true
           draft: false
           tag_name: ${{ steps.versionTag.outputs.tag }}
           token: ${{ secrets.GITHUB_TOKEN }}
