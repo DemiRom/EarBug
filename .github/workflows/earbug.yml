@@ -117,11 +117,9 @@ jobs:
           export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
           export QMAKE=$QTDIR/bin/qmake
 
-          echo "DEBUG DEBUG DEBUG"
           ls $QTDIR/include/QtGui/6.4.2/QtGui/qpa
-          mkdir -p /usr/include/qt6/
-          cp -r $QTDIR/include/* /usr/include/qt6/
-          echo "EDEBUG"
+          sudo mkdir -p /usr/include/qt6/
+          sudo cp -r $QTDIR/include/* /usr/include/qt6/
 
       - name: Configure
         run: |
