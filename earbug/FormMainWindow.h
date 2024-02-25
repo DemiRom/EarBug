@@ -6,6 +6,7 @@
 #include "FormMainWindow.h"
 #include "PulseAudioController.h"
 #include "FormSettingsWindow.h"
+#include "uglobalhotkeys.h"
 
 namespace dd::forms {
     QT_BEGIN_NAMESPACE
@@ -28,24 +29,30 @@ namespace dd::forms {
         Ui::FormMainWindow *ui;
         float masterVolumeLevel = 0;
         audio::PulseAudioController *pulseAudioController;
-        forms::FormSettingsWindow *settingsWindow = nullptr;
-
+        FormSettingsWindow *settingsWindow = nullptr;
 
         void populateOutputDevices() const;
+
 
         bool masterVolumeMuted = false;
 
         [[nodiscard]] QIcon getSpeakerIconBasedOnVolume() const;
+
         void updateComputerMasterVolume();
 
     private slots:
+        void showFromHotkey();
+
         void outputDeviceChanged(int index) const;
 
         void masterVolumeSliderChanged(float value);
 
         void masterVolumeMuteButtonPressed();
 
-        void settingsButtonPressed();
+        void settingsButtonPressed() const;
+
+        void applicationStateChanged(Qt::ApplicationState state);
+
     };
 } // dd::forms
 

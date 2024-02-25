@@ -17,10 +17,12 @@ if(NOT PULSEAUDIO_LIBRARY)
     message(FATAL_ERROR "Could not find PulseAudio library.")
 endif()
 
+include_directories(../uglobalhotkey)
+
 set(SRCS
         BaseTheme.h
         main.cpp
-        FormMainWindow.qrc
+        EarBug.qrc
         FormMainWindow.cpp
         FormMainWindow.h
         FormMainWindow.ui
@@ -32,6 +34,17 @@ set(SRCS
         FormSettingsWindow.ui
         PulseAudioController.cpp
         PulseAudioController.h
+        EarBugWindowPosition.h
+        GlobalSettingsManager.cpp
+        GlobalSettingsManager.h
+        Hotkey.h
+        HotkeySettingsWidget.cpp
+        HotkeySettingsWidget.h
+        HotkeySettingsWidget.ui
+        EarBug.cpp
+        EarBug.h
+        DebugLogger.h
+        Theme.h
 )
 
 # Add exe here
@@ -58,7 +71,7 @@ else (UNIX AND NOT APPLE)
     qt_add_executable(EarBug ${SRCS})
 endif ()
 
-target_link_libraries(EarBug PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Multimedia pulse)
+target_link_libraries(EarBug PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Multimedia pulse uglobalhotkey)
 
 if (WIN32 AND CMAKE_BUILD_TYPE MATCHES "Release" AND NOT MXE_BUILD)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${QT_INSTALL_PATH}/bin/windeployqt.exe --dir $<TARGET_FILE_DIR:${PROJECT_NAME}> $<TARGET_FILE_DIR:${PROJECT_NAME}>/${PROJECT_NAME}.exe)
