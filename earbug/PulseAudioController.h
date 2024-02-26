@@ -55,7 +55,7 @@ namespace dd::audio {
 
         unsigned int getSinksCount();
 
-        std::shared_ptr<std::vector<PSink> > listSinks();
+        std::shared_ptr<std::vector<PSink>> listSinks();
 
         PSink changeVolume(uint32_t index, int change, bool inc);
 

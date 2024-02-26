@@ -60,6 +60,14 @@ namespace dd::forms {
         connect(qApp, &QGuiApplication::applicationStateChanged, this, &FormMainWindow::applicationStateChanged);
         connect(earBugSettingsManagerPtr, &earbug::settings::GlobalSettingsManager::showEarBugHotkeyPressed, this,
                 &FormMainWindow::showFromHotkey);
+
+        connect(earBugSettingsManagerPtr, &earbug::settings::GlobalSettingsManager::forceQuit, this, [&] {
+            this->close();
+            QApplication::quit(); //TODO Ensure proper memory cleanup
+        });
+
+        connect(earBugSettingsManagerPtr, &earbug::settings::GlobalSettingsManager::showSettings, this,
+                &FormMainWindow::settingsButtonPressed);
     }
 
     FormMainWindow::~FormMainWindow() {

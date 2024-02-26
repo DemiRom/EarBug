@@ -1,5 +1,8 @@
 #include "FormSettingsWindow.h"
 
+#include <QFileDialog>
+#include <QMessageBox>
+
 #include "EarBug.h"
 #include "EarBugWindowPosition.h"
 #include "GlobalSettingsManager.h"
@@ -40,6 +43,9 @@ namespace dd::forms {
         connect(this->ui->widthLineEdit, &QLineEdit::textChanged, this, &FormSettingsWindow::widthChanged);
         connect(this->ui->heightLineEdit, &QLineEdit::textChanged, this, &FormSettingsWindow::heightChanged);
         connect(this->ui->themeComboBox, &QComboBox::currentIndexChanged, this, &FormSettingsWindow::themeChanged);
+
+        connect(this->ui->addThemeButton, &QPushButton::pressed, this, &FormSettingsWindow::addThemeButtonPressed);
+        connect(this->ui->deleteThemeButton, &QPushButton::pressed, this, &FormSettingsWindow::deleteThemeButtonPressed);
     }
 
     FormSettingsWindow::~FormSettingsWindow() {
@@ -49,10 +55,7 @@ namespace dd::forms {
     }
 
     void FormSettingsWindow::loadAllSettings() {
-        //Populate the display selection combo box
-        for (const auto display: QApplication::screens()) {
-            this->ui->selectDisplayComboBox->addItem(display->name());
-        }
+        populateDisplayComboBox();
 
         const auto earBugAppSettingsManagerPtr = earbug::EarBug::getApplicationSingletonPointer()->getSettingsManager();
 
@@ -64,16 +67,27 @@ namespace dd::forms {
         this->ui->selectDisplayComboBox->setCurrentText(earBugAppSettingsManagerPtr->getDisplay());
         this->ui->showOnCurrentDisplayCheckBox->setChecked(earBugAppSettingsManagerPtr->getShowOnCurrentDisplay());
         this->ui->selectDisplayComboBox->setDisabled(this->ui->showOnCurrentDisplayCheckBox->isChecked());
-
-        this->ui->themeComboBox->clear();
-        for (const auto& [name, theme] : earbug::settings::GlobalSettingsManager::loadThemes()) {
-            this->ui->themeComboBox->addItem(name, theme);
-        }
-
         //TODO Check if the theme still exists
         this->ui->themeComboBox->setCurrentText(earBugAppSettingsManagerPtr->getTheme());
 
         setPositionalButtonState();
+    }
+
+    void FormSettingsWindow::populateDisplayComboBox() const {
+        //Populate the display selection combo box
+        this->ui->selectDisplayComboBox->clear();
+        for (const auto display: QApplication::screens()) {
+            this->ui->selectDisplayComboBox->addItem(display->name());
+        }
+    }
+
+    void FormSettingsWindow::populateThemeComboBox() const {
+        const auto earBugAppSettingsManagerPtr = earbug::EarBug::getApplicationSingletonPointer()->getSettingsManager();
+
+        this->ui->themeComboBox->clear();
+        for (const auto& [name, theme] : earBugAppSettingsManagerPtr->loadThemes()) {
+            this->ui->themeComboBox->addItem(name, theme);
+        }
     }
 
     void FormSettingsWindow::setPositionalButtonState() const {
@@ -188,6 +202,22 @@ namespace dd::forms {
         const auto earBugAppPtr = earbug::EarBug::getApplicationSingletonPointer();
         earBugAppPtr->getSettingsManager()->saveTheme(this->ui->themeComboBox->currentText());
         earBugAppPtr->setTheme(this->ui->themeComboBox->currentData().toString());
+    }
+
+    // ReSharper disable once CppMemberFunctionMayBeStatic
+    void FormSettingsWindow::addThemeButtonPressed() const { // NOLINT(*-convert-member-functions-to-static)
+        const auto earBugAppPtr = earbug::EarBug::getApplicationSingletonPointer();
+        const auto fileName = QFileDialog::getOpenFileName(nullptr, "Open your theme", QDir::homePath(), "CSS files (*.css);;Theme files (*.theme);;All Files (*.*)");
+        if (!fileName.isEmpty()) {
+            earBugAppPtr->getSettingsManager()->addTheme(fileName);
+        }
+        populateThemeComboBox();
+    }
+
+    void FormSettingsWindow::deleteThemeButtonPressed() const {
+        const auto earBugAppPtr = earbug::EarBug::getApplicationSingletonPointer();
+        earBugAppPtr->getSettingsManager()->deleteTheme(this->ui->themeComboBox->currentText());
+        populateThemeComboBox();
     }
 
     void FormSettingsWindow::showEvent(QShowEvent *event) {

@@ -39,7 +39,7 @@ namespace dd::earbug {
     }
 
     void EarBug::setWindowPosition() const {
-        if(this->earbugDisplay == nullptr) {
+        if (this->earbugDisplay == nullptr) {
             qWarning() << "Display Ptr is NULL";
             return;
         }
@@ -52,36 +52,43 @@ namespace dd::earbug {
         qDebug() << "Screen Resolution Top: " << screenResolution.top() << "Left: " << screenResolution.left() <<
                 " Width: " << screenResolution.width() << "Height:" << screenResolution.height();
 
-        int offsetX = getSettingsManager()->getXOffset();
-        int offsetY = getSettingsManager()->getYOffset();
-
-        //Fix bug that is displayed on wrong monitor
-        offsetX = offsetX + screenResolution.left();
-        offsetY = offsetY + screenResolution.top();
+        const int offsetX = getSettingsManager()->getXOffset();
+        const int offsetY = getSettingsManager()->getYOffset();
 
         switch (getSettingsManager()->getEarbugWindowPosition()) {
             case settings::EarBugWindowPosition::TOP_RIGHT:
-                mainWindow->move(screenResolution.width() - mainWindow->geometry().width() + (-offsetX), offsetY);
+                mainWindow->move(
+                    screenResolution.width() - mainWindow->geometry().width() + (-offsetX + screenResolution.left()),
+                    offsetY + screenResolution.top()
+                );
                 break;
             case settings::EarBugWindowPosition::TOP_LEFT:
-                mainWindow->move(offsetX, offsetY);
+                mainWindow->move(
+                    offsetX + screenResolution.left(),
+                    offsetY + screenResolution.top()
+                );
                 break;
             case settings::EarBugWindowPosition::BOTTOM_LEFT:
-                mainWindow->move(offsetX, screenResolution.height() - mainWindow->geometry().height() + (-offsetY));
+                mainWindow->move(
+                    offsetX + screenResolution.left(),
+                    screenResolution.height() - mainWindow->geometry().height() + (-offsetY + screenResolution.top())
+                );
                 break;
             case settings::EarBugWindowPosition::BOTTOM_RIGHT:
-                mainWindow->move(screenResolution.width() - mainWindow->geometry().width() + (-offsetX),
-                                 screenResolution.height() - mainWindow->geometry().height() + (-offsetY));
+                mainWindow->move(
+                    screenResolution.width() - mainWindow->geometry().width() + (-offsetX + screenResolution.left()),
+                    screenResolution.height() - mainWindow->geometry().height() + (-offsetY + screenResolution.top())
+                );
                 break;
             default: ;
         }
     }
 
     void EarBug::setWindowSize() const {
-        if(this->settingsManager->getWidth() == 0) {
+        if (this->settingsManager->getWidth() == 0) {
             this->settingsManager->saveWidth(this->mainWindow->geometry().width());
         }
-        if(this->settingsManager->getHeight() == 0) {
+        if (this->settingsManager->getHeight() == 0) {
             this->settingsManager->saveHeight(this->mainWindow->geometry().height());
         }
 
@@ -90,14 +97,14 @@ namespace dd::earbug {
         this->mainWindow->setFixedSize(width, height);
     }
 
-    void EarBug::setDisplay(const QString& displayName) {
-        QScreen* newScreen = nullptr;
-        for(const auto& screen : QApplication::screens()) {
-            if(screen->name() == displayName)
+    void EarBug::setDisplay(const QString &displayName) {
+        QScreen *newScreen = nullptr;
+        for (const auto &screen: QApplication::screens()) {
+            if (screen->name() == displayName)
                 newScreen = screen;
         }
 
-        if(newScreen == nullptr) {
+        if (newScreen == nullptr) {
             qCritical() << "ERROR Screen could not be found!";
             return;
         }
@@ -106,7 +113,7 @@ namespace dd::earbug {
         setWindowPosition();
     }
 
-    void EarBug::setTheme(const QString& theme) const {
+    void EarBug::setTheme(const QString &theme) const {
         this->app->setStyleSheet(theme);
     }
 

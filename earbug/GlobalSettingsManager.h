@@ -1,6 +1,7 @@
 #ifndef GLOBALSETTINGSMANAGER_H
 #define GLOBALSETTINGSMANAGER_H
 
+#include <qdir.h>
 #include <QSettings>
 
 #include "EarBugWindowPosition.h"
@@ -25,6 +26,10 @@ namespace dd::earbug::settings {
         void saveWindowPosition(EarBugWindowPosition windowPosition) const;
 
         void saveHotkey(const Hotkey &hotkey) const;
+
+        void addTheme(const QString &fileName) const;
+
+        void deleteTheme(const QString &fileName) const;
 
         void saveTheme(const QString &theme) const;
 
@@ -58,9 +63,9 @@ namespace dd::earbug::settings {
 
         [[nodiscard]] int getHeight() const;
 
-        [[nodiscard]] static QList<dd::settings::Theme> loadThemes();
+        [[nodiscard]] QList<dd::settings::Theme> loadThemes() const;
 
-        [[nodiscard]] static QString getThemeDataByName(const QString& name);
+        [[nodiscard]] QString getThemeDataByName(const QString& name) const;
 
         [[nodiscard]] QString getThemeData() const;
 
@@ -71,6 +76,7 @@ namespace dd::earbug::settings {
         void masterVolumeUp();
         void masterVolumeDown();
         void hotkeyPressed(size_t id);
+        void showSettings();
 
     protected:
     private:
@@ -80,6 +86,8 @@ namespace dd::earbug::settings {
 
         QSettings *settings = nullptr;
         UGlobalHotkeys *hotkeyManager = nullptr;
+
+        const QString themeDirectory = QDir::homePath() + "/.config/EarBug/themes";
     };
 }
 

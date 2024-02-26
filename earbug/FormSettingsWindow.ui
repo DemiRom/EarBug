@@ -36,6 +36,122 @@
          <property name="elideMode">
           <enum>Qt::ElideNone</enum>
          </property>
+         <widget class="QWidget" name="applicationTab">
+          <attribute name="icon">
+           <iconset resource="EarBug.qrc">
+            <normaloff>:/app.png</normaloff>:/app.png</iconset>
+          </attribute>
+          <attribute name="title">
+           <string>Application</string>
+          </attribute>
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_10">
+             <item>
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>UI Theme</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QComboBox" name="themeComboBox">
+                 <property name="maximumSize">
+                  <size>
+                   <width>348</width>
+                   <height>36</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="deleteThemeButton">
+                 <property name="maximumSize">
+                  <size>
+                   <width>128</width>
+                   <height>128</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Delete Theme</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="addThemeButton">
+                 <property name="maximumSize">
+                  <size>
+                   <width>128</width>
+                   <height>128</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Add Theme</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Language</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="languageComboBox">
+               <property name="maximumSize">
+                <size>
+                 <width>348</width>
+                 <height>36</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Audio Server</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="selectAudioComboBox">
+               <property name="maximumSize">
+                <size>
+                 <width>348</width>
+                 <height>36</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="startOnSystemStartupCheckBox">
+               <property name="text">
+                <string>Launch On System Startup</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
          <widget class="QWidget" name="flyoutTab">
           <attribute name="icon">
            <iconset resource="EarBug.qrc">
@@ -271,16 +387,6 @@
                </layout>
               </item>
               <item>
-               <widget class="QLabel" name="label_5">
-                <property name="text">
-                 <string>Theme</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="themeComboBox"/>
-              </item>
-              <item>
                <spacer name="verticalSpacer">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
@@ -405,6 +511,16 @@
                </item>
               </layout>
              </widget>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="versionLabel">
+             <property name="text">
+              <string>Version</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
             </widget>
            </item>
           </layout>

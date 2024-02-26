@@ -32,6 +32,9 @@ namespace dd::earbug::settings {
         this->hotkeys.append(getHotkey({
             "Quit", QKeySequence::fromString("Ctrl+Shift+E"), 5
         }));
+        this->hotkeys.append(getHotkey( {
+            "Show Settings", QKeySequence::fromString("Ctrl+Shift+S"), 6
+        }));
 
         registerHotkeys();
 
@@ -52,6 +55,9 @@ namespace dd::earbug::settings {
                     break;
                 case 5:
                     emit forceQuit();
+                    break;
+                case 6:
+                    emit showSettings();
                     break;
                 default:
                     emit hotkeyPressed(id);
@@ -88,6 +94,18 @@ namespace dd::earbug::settings {
         this->hotkeyManager->registerHotkey(hotkey.keys.toString(), hotkey.id);
     }
 
+    void GlobalSettingsManager::addTheme(const QString &fileName) const {
+        if(!QFile::copy(fileName, this->themeDirectory + "/" + fileName)) {
+            qCritical() << "Could not copy theme!"; //TODO Handle the error better
+        }
+    }
+
+    void GlobalSettingsManager::deleteTheme(const QString &fileName) const {
+        if(!QFile::moveToTrash(this->themeDirectory + "/" + fileName)) {
+            qCritical() << "Could not delete theme!"; //TODO Handle the error better
+        }
+    }
+
     void GlobalSettingsManager::saveTheme(const QString &theme) const {
         this->settings->setValue("theme", theme);
     }
@@ -116,12 +134,12 @@ namespace dd::earbug::settings {
         return this->settings->value("height").toInt();
     }
 
-    QList<dd::settings::Theme> GlobalSettingsManager::loadThemes() {
-        const auto themeDir = QDir("./themes");
+    QList<dd::settings::Theme> GlobalSettingsManager::loadThemes() const {
+        const auto themeDir = QDir(this->themeDirectory);
         auto themes = themeDir.entryList(QStringList() << "*.theme", QDir::Files);
         auto ret = QList<dd::settings::Theme>();
         for (const auto& name : themes) {
-            auto file = QFile("./themes/" + name);
+            auto file = QFile(this->themeDirectory + "/" + name);
             if(!file.open(QFile::ReadOnly)) {
                 continue;
             }
@@ -132,8 +150,8 @@ namespace dd::earbug::settings {
         return ret;
     }
 
-    QString GlobalSettingsManager::getThemeDataByName(const QString &name) {
-        auto file = QFile("./themes/" + name);
+    QString GlobalSettingsManager::getThemeDataByName(const QString &name) const {
+        auto file = QFile(this->themeDirectory + "/" + name);
         if(!file.open(QFile::ReadOnly)) {
             qWarning() << "Theme file not found";
             return "";

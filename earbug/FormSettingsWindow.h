@@ -30,6 +30,10 @@ namespace dd::forms {
 
         void loadAllSettings();
 
+        void populateDisplayComboBox() const;
+
+        void populateThemeComboBox() const;
+
         void setPositionalButtonState() const;
 
         static void updateWindowPosition();
@@ -60,6 +64,10 @@ namespace dd::forms {
         void widthChanged(const QString &newText) const;
 
         void themeChanged(int idx) const;
+
+        void addThemeButtonPressed() const;
+
+        void deleteThemeButtonPressed() const;
 
     protected:
         void showEvent(QShowEvent *event) override;
